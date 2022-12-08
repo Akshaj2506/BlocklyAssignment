@@ -7,6 +7,7 @@ body {
    position: relative;
    height: 100%;
    border: 1px solid lightgray;
+   overflow: scroll;
 }
 .blockly-editor {
    border-bottom: 1px solid lightgray;
