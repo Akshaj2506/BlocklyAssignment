@@ -1,0 +1,26 @@
+body {
+   display: grid;
+   grid-template-columns: repeat(2, auto);
+   grid-template-rows: 600px 80px;
+}
+#output-container {
+   position: relative;
+   height: 100%;
+   border: 1px solid lightgray;
+}
+.blockly-editor {
+   border-bottom: 1px solid lightgray;
+}
+#run-button {
+   height: 50px;
+   width: 160px;
+   background-color: rgb(24, 199, 33);
+   border: none;
+   cursor: pointer;
+}
+#run-button:hover {
+   background-color: rgb(24, 166, 31);
+}
+#button-container {
+   justify-self: center;
+}
