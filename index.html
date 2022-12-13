@@ -10,23 +10,27 @@
     <div class="blockly-editor">
       <div id="blocklyDiv" height="100%" width="480"></div>
     </div>
-    <div id="output-container"></div>
+    <div id="output-container">
+    </div>
     <div id="button-container">
       <button onclick="runCode()" id="run-button">Run JavaScript</button>
-      <a href="https://github.com/Akshaj2506/BlocklyAssignment" target="_blank">Click here for the program code</a>
+      <a href="https://github.com/Akshaj2506/BlocklyAssignment" target="_blank"
+        >Click here for the program code</a
+      >
     </div>
     <script src="https://unpkg.com/blockly"></script>
     <script src="blocks.js"></script>
-    <!-- <script src="main.js"></script> -->
     <script>
-      window.onload = alert("Hello user! Just drag and drop the custom blocks in the white area and edit the configurations and click on 'Run JavaScript' button. Top and left attribute is for changing the position of the shapes on the screen");  
+      window.onload = alert(
+        "Hello user! Just drag and drop the custom blocks in the white area and edit the configurations and click on 'Run JavaScript' button. Top and left attribute is for changing the position of the shapes on the screen"
+      );
       const toolbox = {
         kind: "flyoutToolbox",
         contents: [
           {
             kind: "block",
             type: "foodcollector",
-          }
+          },
         ],
       };
       var workspace = Blockly.inject("blocklyDiv", {

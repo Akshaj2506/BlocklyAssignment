@@ -3,7 +3,7 @@ const animals = document.querySelectorAll('.animal-item');
 const outputDiv = document.getElementById('output-container');
 const outputDivHeight = outputDiv.clientHeight;
 const outputDivWidth = outputDiv.clientWidth;
-let foodCoordinates;
+let numOfApples;
 Blockly.common.defineBlocksWithJsonArray([{
    "type": "foodcollector",
    "message0": "How many Elephants? %1 %2 %3 How many apples to collect? %4 %5 %6",
@@ -21,7 +21,7 @@ Blockly.common.defineBlocksWithJsonArray([{
          "name": "elephantnum",
          "value": 0,
          "min": 1,
-         "max": 5
+         "max": 15
       },
       {
          "type": "input_value",
@@ -54,64 +54,71 @@ Blockly.common.defineBlocksWithJsonArray([{
 
 Blockly.JavaScript['foodcollector'] = function (block) {
    let numOfElephants = parseInt(block.getFieldValue('elephantnum'));
-   let numOfApples = parseInt(block.getFieldValue('applenum'));
+   numOfApples = parseInt(block.getFieldValue('applenum'));
    var code = `
-         const placeFoodItems = (foodCount) => {
-            for (var i = 0; i < foodCount; i++) {
-               const top = Math.floor((Math.random() * outputDivHeight) - 30);
-               const left = Math.floor((Math.random() * outputDivWidth) - 30);
-               const newFoodItem = document.createElement('div');
-               newFoodItem.classList.add('food-item');
-               outputDiv.append(newFoodItem);
-               const styles = {
-                  'height': '30px',
-                  'width': '30px',
-                  'position': 'absolute',
-                  'top': top,
-                  'left': left,
-                  'background': "url('apple.png')",
-                  'background-position': 'center',
-                  'background-size': 'cover'
-               }
-               Object.assign(newFoodItem.style, styles);
-            }
-         }
-      
-         const placeAnimals = (animalCount) => {
-            for (var i = 0; i < animalCount; i++) {
-               const top = Math.floor((Math.random() * outputDivHeight) - 30);
-               const left = Math.floor((Math.random() * outputDivWidth) - 30);
-               const newAnimalItem = document.createElement('div');
-               outputDiv.append(newAnimalItem);
-               newAnimalItem.classList.add('animal-item');
-               const styles = {
-                  'height': '50px',
-                  'width': '50px',
-                  'position': 'absolute',
-                  'top': top,
-                  'left': left,
-                  'background': "url('elephant.png')",
-                  'background-position': 'center',
-                  'background-size': 'cover',
-                  'z-index': '5'
-               }
-               Object.assign(newAnimalItem.style, styles);
-            }
-         }
 
       placeFoodItems(${numOfApples});
       placeAnimals(${numOfElephants});
+
       const animals = document.querySelectorAll('.animal-item');
-      if (animals.length > 0) {
+      const apples = document.querySelectorAll('.food-item');
+      
+      if (apples.length > 0) {
          let moving = setInterval(move, 2000);
+
       }
-      if (animals.length == 0) {
+      if (apples.length == 0) {
          clearInterval(moving);
          alert("All the apples have been eaten");
       }
       `
-
    return code;
+
+}
+const placeFoodItems = (foodCount) => {
+   const scoreboard = document.createElement('div');
+   scoreboard.id = "scoreboard";
+   outputDiv.append(scoreboard);
+   for (var i = 0; i < foodCount; i++) {
+      const top = Math.floor((Math.random() * outputDivHeight) - 30);
+      const left = Math.floor((Math.random() * outputDivWidth) - 30);
+      const newFoodItem = document.createElement('div');
+      newFoodItem.classList.add('food-item');
+      outputDiv.append(newFoodItem);
+      const styles = {
+         'height': '30px',
+         'width': '30px',
+         'position': 'absolute',
+         'top': top,
+         'left': left,
+         'background': "url('apple.png')",
+         'background-position': 'center',
+         'background-size': 'cover'
+      }
+      Object.assign(newFoodItem.style, styles);
+   }
+}
+
+const placeAnimals = (animalCount) => {
+   for (var i = 0; i < animalCount; i++) {
+      const top = Math.floor((Math.random() * outputDivHeight) - 30);
+      const left = Math.floor((Math.random() * outputDivWidth) - 30);
+      const newAnimalItem = document.createElement('div');
+      outputDiv.append(newAnimalItem);
+      newAnimalItem.classList.add('animal-item');
+      const styles = {
+         'height': '50px',
+         'width': '50px',
+         'position': 'absolute',
+         'top': top,
+         'left': left,
+         'background': "url('elephant.png')",
+         'background-position': 'center',
+         'background-size': 'cover',
+         'z-index': '5'
+      }
+      Object.assign(newAnimalItem.style, styles);
+   }
 }
 
 const move = () => {
@@ -121,16 +128,14 @@ const move = () => {
       animal.style.left = `${(Math.random() * outputDivWidth) - 30}`;
       animal.style.transition = '3s';
    })
-   console.log(animals[1].getBoundingClientRect().left);
    checkCollision();
+   document.getElementById('scoreboard').innerHTML = `${numOfApples - (document.querySelectorAll('.food-item').length)}`;
+
 }
-
-
 
 const checkCollision = () => {
    const animals = document.querySelectorAll('.animal-item');
    const apples = document.querySelectorAll('.food-item');
-
    for (var i = 0; i < animals.length; i++) {
       for (var j = 0; j < apples.length; j++) {
          let isOverlapping = !(
