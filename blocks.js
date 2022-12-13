@@ -1,259 +1,140 @@
+const outputDiv = document.getElementById('output-container');
+const outputDivHeight = outputDiv.clientHeight;
+const outputDivWidth = outputDiv.clientWidth;
+let foodCoordinates;
 Blockly.common.defineBlocksWithJsonArray([{
-   "type": "circle",
-   "message0": "createCircle %1 width %2 length %3 %4 color %5 %6 top %7 left %8 %9",
+   "type": "foodcollector",
+   "message0": "How many Elephants? %1 %2 %3 How many apples to collect? %4 %5 %6",
    "args0": [
       {
-         "type": "input_value",
-         "name": "measurements"
+         "type": "field_image",
+         "src": "elephant.png",
+         "width": 35,
+         "height": 35,
+         "alt": "*",
+         "flipRtl": false
       },
       {
          "type": "field_number",
-         "name": "width",
-         "value": 50,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "field_number",
-         "name": "length",
-         "value": 50,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "input_value",
-         "name": "size",
-         "align": "CENTRE"
-      },
-      {
-         "type": "field_colour",
-         "name": "color",
-         "colour": "#ff0000"
-      },
-      {
-         "type": "input_value",
-         "name": "colors",
-         "align": "CENTRE"
-      },
-      {
-         "type": "field_number",
-         "name": "top",
+         "name": "elephantnum",
          "value": 0,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "field_number",
-         "name": "left",
-         "value": 0,
-         "min": 0,
-         "max": 1000
+         "min": 1,
+         "max": 5
       },
       {
          "type": "input_value",
-         "name": "position",
-         "align": "CENTRE"
+         "name": "elephant_counter"
+      },
+      {
+         "type": "field_image",
+         "src": "apple.png",
+         "width": 30,
+         "height": 30,
+         "alt": "*",
+         "flipRtl": false
+      },
+      {
+         "type": "field_number",
+         "name": "applenum",
+         "value": 0,
+         "min": 1,
+         "max": 100
+      },
+      {
+         "type": "input_value",
+         "name": "food"
       }
    ],
-   "previousStatement": null,
-   "nextStatement": null,
-   "colour": 230,
-   "tooltip": "",
-   "helpUrl": ""
-},
-{
-   "type": "rectangle",
-   "message0": "createRectangle %1 width %2 length %3 %4 color %5 %6 top %7 left %8 %9",
-   "args0": [
-      {
-         "type": "input_value",
-         "name": "measurements"
-      },
-      {
-         "type": "field_number",
-         "name": "width",
-         "value": 50,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "field_number",
-         "name": "length",
-         "value": 50,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "input_value",
-         "name": "NAME",
-         "align": "CENTRE"
-      },
-      {
-         "type": "field_colour",
-         "name": "color",
-         "colour": "#ff0000"
-      },
-      {
-         "type": "input_value",
-         "name": "colors",
-         "align": "CENTRE"
-      },
-      {
-         "type": "field_number",
-         "name": "top",
-         "value": 0,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "field_number",
-         "name": "left",
-         "value": 0,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "input_value",
-         "name": "position",
-         "align": "CENTRE"
-      }
-   ],
-   "previousStatement": null,
-   "nextStatement": null,
-   "colour": 180,
-   "tooltip": "",
-   "helpUrl": ""
-},
-{
-   "type": "triangle",
-   "message0": "createTriangle %1 width %2 length %3 %4 color %5 %6 top %7 left %8 %9",
-   "args0": [
-      {
-         "type": "input_value",
-         "name": "measurements"
-      },
-      {
-         "type": "field_number",
-         "name": "width",
-         "value": 50,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "field_number",
-         "name": "length",
-         "value": 50,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "input_value",
-         "name": "size",
-         "align": "CENTRE"
-      },
-      {
-         "type": "field_colour",
-         "name": "color",
-         "colour": "#ff0000"
-      },
-      {
-         "type": "input_value",
-         "name": "colors",
-         "align": "CENTRE"
-      },
-      {
-         "type": "field_number",
-         "name": "top",
-         "value": 0,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "field_number",
-         "name": "left",
-         "value": 0,
-         "min": 0,
-         "max": 1000
-      },
-      {
-         "type": "input_value",
-         "name": "position",
-         "align": "CENTRE"
-      }
-   ],
-   "previousStatement": null,
-   "nextStatement": null,
-   "colour": 90,
+   "colour": 300,
    "tooltip": "",
    "helpUrl": ""
 }])
-Blockly.JavaScript['rectangle'] = function(block) {
-   var width = block.getFieldValue('width');
-   var height = block.getFieldValue('length');
-   var color = block.getFieldValue('color');
-   var top = block.getFieldValue('top');
-   var left = block.getFieldValue('left');
+
+Blockly.JavaScript['foodcollector'] = function(block) {
+   let numOfElephants = parseInt(block.getFieldValue('elephantnum'));
+   let numOfApples = parseInt(block.getFieldValue('applenum'));
    var code = `
-   var newDiv = document.createElement('div');
-   var container = document.getElementById('output-container');
-   container.append(newDiv); 
-   var styles = {
-      'width' : ${width},
-      'height': ${height},
-      'position': 'absolute',
-      'top': ${top},
-      'left': ${left}
-   };
-   Object.assign(newDiv.style,styles);
-   newDiv.style.backgroundColor = "${color}";\n`
+      const placeFoodItems = (foodCount) => {
+         foodCoordinates = [];
+         for (var i = 0; i < foodCount; i++) {
+            const top = Math.floor((Math.random() * outputDivHeight) - 30);
+            const left = Math.floor((Math.random() * outputDivWidth) - 30);
+            const newFoodItem = document.createElement('div');
+            newFoodItem.classList.add('food-item');
+            outputDiv.append(newFoodItem);
+            const styles = {
+               'height': '30px',
+               'width': '30px',
+               'position': 'absolute',
+               'top': top,
+               'left': left,
+               'background' : "url('apple.png')",
+               'background-position': 'center',
+               'background-size': 'cover'
+            }
+            Object.assign(newFoodItem.style, styles);
+            var rect = newFoodItem.getBoundingClientRect();
+            foodCoordinates.push({
+               'top': Math.floor(rect.top),
+               'left': Math.floor(rect.left),
+               'bottom': Math.floor(rect.bottom),
+               'right': Math.floor(rect.right)
+            });
+         }
+         console.log(foodCoordinates);
+      }
 
-   console.log(code);
-   return code;
+      const placeAnimals = (animalCount) => {
+         for (var i = 0; i < animalCount; i++) {
+            const top = Math.floor((Math.random() * outputDivHeight) - 30);
+            const left = Math.floor((Math.random() * outputDivWidth) - 30);
+            const newAnimalItem = document.createElement('div');
+            outputDiv.append(newAnimalItem);
+            const styles = {
+               'height': '50px',
+               'width': '50px',
+               'position': 'absolute',
+               'top': top,
+               'left': left,
+               'background': "url('elephant.png')",
+               'background-position': 'center',
+               'background-size': 'cover',
+               'z-index': '5'
+            }
+            Object.assign(newAnimalItem.style, styles);
+         }
+      }
+      
+      placeFoodItems(${numOfApples});
+      placeAnimals(${numOfElephants});
+      `
+      return code;
 }
-Blockly.JavaScript['circle'] = function(block) {
-   var width = block.getFieldValue('width');
-   var height = block.getFieldValue('length');
-   var color = block.getFieldValue('color');
-   var top = block.getFieldValue('top');
-   var left = block.getFieldValue('left');
-   var code = `
-   var newDiv = document.createElement('div');
-   var container = document.getElementById('output-container');
-   container.append(newDiv); 
-   var styles = {
-      'width' : ${width},
-      'height': ${height},
-      'position': 'absolute',
-      'border-radius': '100%',
-      'top': ${top},
-      'left': ${left}
-   };
-   Object.assign(newDiv.style,styles);
-   newDiv.style.backgroundColor = "${color}";\n`
 
-   console.log(code);
-   return code;
-}
-Blockly.JavaScript['triangle'] = function(block) {
-   var base = block.getFieldValue('width');
-   var sides = block.getFieldValue('length');
-   var color = block.getFieldValue('color');
-   var top = block.getFieldValue('top');
-   var left = block.getFieldValue('left');
-   var code = 
-   `var newTriangle = document.createElement('div');
-   var container = document.getElementById('output-container');
-   container.append(newTriangle); 
-   var styles = {
-      'border-left': '${sides}px solid transparent',
-      'border-right': '${sides}px solid transparent',
-      'position': 'absolute',
-      'top': ${top},
-      'left': ${left}
-   };
-   Object.assign(newTriangle.style, styles);
-   newTriangle.style.borderBottom = "${base}px solid ${color}";\n`;
+// var animalPosition = newAnimalItem.getBoundingClientRect();
+// checkCollision({
+//    left: animalPosition.left,
+//    right: animalPosition.right,
+//    top: animalPosition.top,
+//    bottom: animalPosition.bottom
+// })
 
-   console.log(code);
-   return code;
-}
+// const checkCollision = (animalPosition) => {
+//    const left = animalPosition.left;
+//    const right = animalPosition.right;
+//    const top = animalPosition.top;
+//    const bottom = animalPosition.bottom;
+//    const foodItems = document.querySelectorAll('.food-item');
+   
+//    for (var i = 0; i < foodCoordinates.length; i++) {
+//       let isOverlapping = !(
+//          left > element.right ||
+//          right < element.left ||
+//          bottom < element.top ||
+//          top > element.bottom
+//       );
+//       if (isOverlapping) {
+//          foodItems[i].remove();
+//       }
+//    }
+// }

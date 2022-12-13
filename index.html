@@ -17,7 +17,7 @@
     </div>
     <script src="https://unpkg.com/blockly"></script>
     <script src="blocks.js"></script>
-    <script src="main.js"></script>
+    <!-- <script src="main.js"></script> -->
     <script>
       window.onload = alert("Hello user! Just drag and drop the custom blocks in the white area and edit the configurations and click on 'Run JavaScript' button. Top and left attribute is for changing the position of the shapes on the screen");  
       const toolbox = {
@@ -25,16 +25,8 @@
         contents: [
           {
             kind: "block",
-            type: "circle",
-          },
-          {
-            kind: "block",
-            type: "rectangle",
-          },
-          {
-            kind: "block",
-            type: "triangle",
-          },
+            type: "foodcollector",
+          }
         ],
       };
       var workspace = Blockly.inject("blocklyDiv", {
